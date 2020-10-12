@@ -1,0 +1,4 @@
+rootProject.name = 'tq-open-api-sdk'
+include 'tq-open-api-sdk'
+include 'tq-open-api-sdk-test'
+
