@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class OpenApiConfig {
-    private final String openUrl = "https://api.terraqt.com";
+    private static final String OPEN_URL = "https://api.terraqt.com";
     private String key;
     private String secret;
 
@@ -21,5 +21,9 @@ public class OpenApiConfig {
 
     public static OpenApiConfig getConfig() {
         return OPEN_API_CONFIG;
+    }
+
+    public static String getOpenUrl() {
+        return OPEN_URL;
     }
 }

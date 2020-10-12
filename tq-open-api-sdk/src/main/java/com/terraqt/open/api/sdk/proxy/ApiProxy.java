@@ -25,7 +25,7 @@ public class ApiProxy implements InvocationHandler {
         }
         RequestPayload requestPayload = RequestPayload.createRequestPayload(collectParameters(method, args));
         ResponsePayload responsePayload = RpcCaller.call(
-                OpenApiConfig.getConfig().getOpenUrl(),
+                OpenApiConfig.getOpenUrl(),
                 apiAnnotation.path(),
                 OpenApiConfig.getConfig().getKey(),
                 OpenApiConfig.getConfig().getSecret(),

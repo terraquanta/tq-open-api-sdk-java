@@ -26,11 +26,11 @@ public final class JsonHelper {
 
     private static Logger logger = LogManager.getLogger(JsonHelper.class);
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     static {
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        MAPPER.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
 
         SimpleModule module = new SimpleModule();
         module.addSerializer(LocalDate.class, new LocalDateSerializer());
@@ -42,12 +42,12 @@ public final class JsonHelper {
         module.addDeserializer(LocalTime.class, new LocalTimeDeserializer());
         module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
         module.addDeserializer(TypeToken.class, new TypeTokenDeserializer());
-        mapper.registerModule(module);
+        MAPPER.registerModule(module);
     }
 
     private static <T> T read(String json, JavaType javaType) {
         try {
-            return json != null ? mapper.readValue(json, javaType) : null;
+            return json != null ? MAPPER.readValue(json, javaType) : null;
         } catch (IOException ex) {
             logger.warn("String [%s] cannot be converted to Type [%s]", json, javaType);
             return null;
@@ -55,16 +55,16 @@ public final class JsonHelper {
     }
 
     public static <T> T read(String json, TypeToken typeToken) {
-        return read(json, mapper.constructType(typeToken.getType()));
+        return read(json, MAPPER.constructType(typeToken.getType()));
     }
 
     public static <T> T read(String json, Class<T> type) {
-        return read(json, mapper.constructType(type));
+        return read(json, MAPPER.constructType(type));
     }
 
     private static <T> T convert(Object fromJson, JavaType javaType) {
         try {
-            return fromJson != null ? mapper.convertValue(fromJson, javaType) : null;
+            return fromJson != null ? MAPPER.convertValue(fromJson, javaType) : null;
         } catch (IllegalArgumentException ex) {
             logger.warn("Object [%s] cannot be converted to Type [%s]", fromJson, javaType);
             return null;
@@ -72,24 +72,24 @@ public final class JsonHelper {
     }
 
     public static <T> T convert(Object fromJson, TypeToken typeToken) {
-        return convert(fromJson, mapper.constructType(typeToken.getType()));
+        return convert(fromJson, MAPPER.constructType(typeToken.getType()));
     }
 
     public static <T> T convert(Object fromJson, Class<T> type) {
-        return convert(fromJson, mapper.constructType(type));
+        return convert(fromJson, MAPPER.constructType(type));
     }
 
     public static String writeAsString(Object object) {
         try {
-            return mapper.writeValueAsString(object);
+            return MAPPER.writeValueAsString(object);
         } catch (JsonProcessingException ex) {
             throw new IllegalStateException(String.format("Fail to convert Object [%s] to json string", object.getClass().getName()), ex);
         }
     }
 
-    public static boolean isJSONValid(String json) {
+    public static boolean isJsonValid(String json) {
         try {
-            mapper.readTree(json);
+            MAPPER.readTree(json);
             return true;
         } catch (IOException e) {
             return false;

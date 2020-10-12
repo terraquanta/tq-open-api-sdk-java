@@ -11,28 +11,28 @@ public class TqType {
     private static final Logger logger = LogManager.getLogger(TqType.class);
     private TqType() {}
 
-    private static final Map<String, Class<?>> typeMap = Maps.newHashMap();
+    private static final Map<String, Class<?>> TYPE_MAP = Maps.newHashMap();
     static {
         Primitives.allPrimitiveTypes().forEach(primitive ->
-                typeMap.put(primitive.getName(), primitive));
+                TYPE_MAP.put(primitive.getName(), primitive));
     }
 
     public static Class<?> getType(String typeName) {
-        if (!typeMap.containsKey(typeName)) {
-            synchronized (typeMap) {
-                if (!typeMap.containsKey(typeName)) {
+        if (!TYPE_MAP.containsKey(typeName)) {
+            synchronized (TYPE_MAP) {
+                if (!TYPE_MAP.containsKey(typeName)) {
                     Class<?> type = null;
                     try {
                         type = Class.forName(typeName);
                     } catch (ClassNotFoundException ex) {
                         // Do nothing
                     }
-                    typeMap.put(typeName, type);
+                    TYPE_MAP.put(typeName, type);
                 }
             }
         }
 
-        Class<?> type = typeMap.get(typeName);
+        Class<?> type = TYPE_MAP.get(typeName);
         if (type == null) {
             logger.warn(String.format("Class [%s] not found.", typeName));
         }

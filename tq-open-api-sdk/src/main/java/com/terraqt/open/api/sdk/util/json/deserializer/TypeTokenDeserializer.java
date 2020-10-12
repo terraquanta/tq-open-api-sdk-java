@@ -15,23 +15,26 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TypeTokenDeserializer extends JsonDeserializer<TypeToken> {
-    private Pattern pattern = Pattern.compile("^(?<containerType>[LSM])\\((?:(?<elemType>[^,]+)|(?<keyType>[^,]+),(?<valueType>[^,]+))\\)$");
+    private static final Pattern PATTERN = Pattern.compile("^(?<containerType>[LSM])\\((?:(?<elemType>[^,]+)|(?<keyType>[^,]+),(?<valueType>[^,]+))\\)$");
+    private static final String LIST_PREFIX = "L";
+    private static final String SET_PREFIX = "S";
+    private static final String MAP_PREFIX = "M";
 
     @SuppressWarnings("unchecked")
     private TypeToken deserialize(String tokenStr) {
-        Matcher matcher = pattern.matcher(tokenStr);
+        Matcher matcher = PATTERN.matcher(tokenStr);
         if (!matcher.matches()) {
             return TypeToken.of(TqType.getType(tokenStr));
         }
 
         String containerType = matcher.group("containerType");
-        if (containerType.equals("L")) {
+        if (LIST_PREFIX.equalsIgnoreCase(containerType)) {
             return TqToken.listOf(deserialize(matcher.group("elemType")));
         }
-        if (containerType.equals("S")) {
+        if (SET_PREFIX.equalsIgnoreCase(containerType)) {
             return TqToken.setOf(deserialize(matcher.group("elemType")));
         }
-        if (containerType.equals("M")) {
+        if (MAP_PREFIX.equalsIgnoreCase(containerType)) {
             return TqToken.mapOf(deserialize(matcher.group("keyType")), deserialize(matcher.group("valueType")));
         }
 
