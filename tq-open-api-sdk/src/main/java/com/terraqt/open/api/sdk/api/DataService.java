@@ -15,4 +15,7 @@ public interface DataService {
 
     @Api(path = "/v1/data/getGeo")
     String getGeo(String batchId);
+
+    @Api(path = "/v1/data/getImage")
+    String getImage(String batchId);
 }

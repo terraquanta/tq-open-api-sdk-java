@@ -64,6 +64,9 @@ public class Main {
 
                         String geo = dataService.getGeo(batch.getBatchId());
                         System.out.println("\t\t\t" + geo);
+
+                        String image = dataService.getImage(batch.getBatchId());
+                        System.out.println("\t\t\t" + image);
                     });
                 }
 
